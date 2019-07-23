@@ -1,0 +1,15 @@
+<apex:page showHeader="false" sidebar="false">
+    <apex:pageBlock mode="details"  >
+        <apex:pageBlockSection title="Employer Details" columns="1" id="redSection" collapsible="true">  
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Location City"></apex:outputLabel> 
+                <apex:outputText value="lOCATion"/>
+            </apex:pageBlockSectionItem>
+               <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Location City2"></apex:outputLabel> 
+                <apex:outputText value="lOCATion2"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        <iframe src="http://procesys.archisys.biz/autoLogin?token=a28966bac17b8eef99c5afa5eb594130" />
+     </apex:pageBlock>
+</apex:page>

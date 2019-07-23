@@ -1,0 +1,53 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="prodName" type="String" default="" />
+    <aura:attribute name="prodId" type="String" default="" />
+    <aura:attribute name="monthlyProdTarget" type="String" default="" />
+    <aura:attribute name="plannedProdTarget" type="String" default="" />
+    <aura:attribute name="prodTarget" type="String" default="" />
+    <aura:attribute name="demographic" type="String"  description="Value should be 'Domestic' or 'International' "/>
+    <lightning:overlayLibrary aura:id="overlayLib"/> <!-- Needed For Closing modal from parent -->
+    
+    <lightning:tile label="{! v.prodName }" href="{! '/lightning/r/Product__c/'+ v.prodId +'/view'}">
+        <aura:set attribute="media">
+            <lightning:icon iconName="standard:product"/>
+        </aura:set>
+        <dl class="slds-dl_horizontal">
+            <dt class="slds-dl_horizontal__label">
+                <p class="slds-truncate" title="Product Name">Product Name:</p>
+            </dt>
+            <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                <p class="slds-truncate" title="{! v.prodName }">{! v.prodName }</p>
+            </dd>
+            <aura:if isTrue="{! (v.demographic == 'Domestic') ? true : false }">
+                <dt class="slds-dl_horizontal__label">
+                    <p class="" title="Alloted Monthly Target">Monthly Target:</p>
+                </dt>
+                <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                    <p class="slds-truncate" title="{! v.monthlyProdTarget }">{! v.monthlyProdTarget }</p>
+                </dd>
+                <dt class="slds-dl_horizontal__label">
+                    <p class="" title="Total Planned Target">Planned Target:</p>
+                </dt>
+                <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                    <p class="slds-truncate" title="{! v.plannedProdTarget }">{! v.plannedProdTarget }</p>
+                </dd>
+            </aura:if>
+            
+            <aura:if isTrue="{! (v.demographic == 'International') ? true : false }">
+                <dt class="slds-dl_horizontal__label">
+                    <p class="" title="Annual Target">Annual Target:</p>
+                </dt>
+                <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                    <p class="slds-truncate" title="{! v.monthlyProdTarget }">{! v.monthlyProdTarget }</p>
+                </dd>
+                <dt class="slds-dl_horizontal__label">
+                    <p class="" title="Total Planned Target">Planned Target:</p>
+                </dt>
+                <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                    <p class="slds-truncate" title="{! v.plannedProdTarget }">{! v.plannedProdTarget }</p>
+                </dd>
+            </aura:if>
+            
+        </dl>
+    </lightning:tile>
+</aura:component>

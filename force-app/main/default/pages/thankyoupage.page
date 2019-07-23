@@ -1,0 +1,5 @@
+<apex:page >
+    <p>
+        Thank you for filling the details.
+    </p>
+</apex:page>

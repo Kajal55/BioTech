@@ -1,0 +1,12 @@
+.THIS .pillSize{
+    width: 100% !important;
+}
+
+.THIS span.lookupInput .slds-form-element {
+    padding: 0px !important;
+    border: none !important;
+}
+
+.THIS span.lookupInput .slds-form-element label, .THIS .slds-form-element__help{
+    display: none !important;
+}

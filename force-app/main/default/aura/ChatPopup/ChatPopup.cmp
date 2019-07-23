@@ -1,0 +1,164 @@
+<aura:component  controller="ChatWindowController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <ltng:require scripts="{!join(',',$Resource.JQuery,$Resource.jqueryui)}" afterScriptsLoaded="{!c.doInit1}"/>
+    <ltng:require styles="/resource/SLDS201/assets/styles/salesforce-lightning-design-system-vf.css" />
+    <c:ChatComponent aura:id="compB"/>
+    <aura:attribute name="isChatActive" type="Boolean" default="false" /> <!-- Check if user is already chatting with any other user -->
+    
+    <aura:attribute name="UserList" type="User[]" />
+    <aura:attribute name="currentUser" type="User"/>
+    <aura:attribute name="selectedUserId" type="string"/>
+    <aura:attribute name="selectedUserName" type="string"/>
+    <aura:attribute name="message" type="string"/>
+    
+    <aura:attribute name="isSubscribed" type="Boolean" default="false"/> <!-- Check if user has subscribed to the channel or not -->
+    <aura:attribute name="showChatBox" type="Boolean" default="false"/> <!-- Show/Hide the chatbox -->
+    
+    <aura:attribute name="sub" type="Object" /> <!-- Subscription object -->
+    <aura:attribute name="channelName" type="string" default="/u/ChatChannel"/> <!-- To store the StreamingChannel name, I have used a static channel name-->
+    <aura:handler name="init" value="{!this}" action="{!c.applycss}"/>
+    <lightning:utilityBarAPI aura:id="utilitybar_window" />
+    <aura:handler name="init" value="{!this}" action="{!c.refreshUserlist}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.handleSubscription}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="moretabs" type="Aura.Component[]"/>
+    
+    <aura:method name="sampleMethod1" action="{!c.doInit}" description="Sample"> 
+        
+        
+    </aura:method>
+    
+    <aura:html tag="style">
+        @media (max-width: 860px){
+        .slds-modal__content {
+        width: 400px !important;
+        
+        }
+        }
+        @media screen and (max-width: 720px) { 
+        .slds-modal__content {
+        width: 300px !important;
+        }
+        }
+        @media (max-width: 560px){
+        .slds-modal__content {
+        width: 200px !important;
+        }
+        }
+        @media (max-width: 460px){
+        .slds-modal__content {
+        width: 100px !important;
+        }
+        }
+        
+    </aura:html>
+    
+    <!--Events-->
+    <aura:registerEvent name="RemoveComponent" type="c:RemoveComponent"/>
+    
+    
+    <lightning:empApi aura:id="empApi" />
+    <div role="dialog" tabindex="-1" aura:id="Modalbox" aria-labelledby="header43" class="slds-modal">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.removeComponent}">
+                    <span>
+                        <c:svgIcon svgPath="/resource/slds214/assets/icons/standard-sprite/svg/symbols.svg#user" category="standard" size="large" name="user" />
+                        <span class="slds-assistive-text">Close</span>
+                    </span>                 
+                </button>  
+                <span><strong>Chat Box</strong></span>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" > 
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-3">
+                        
+                        <lightning:card >
+                            <aura:set attribute="actions">
+                                
+                                    <lightning:button label="Go Online" onclick="{! c.handleSubscription }" />
+                               
+                            </aura:set>
+                            <hr class="linebreakClass"/>
+                            <aura:if isTrue="{!v.isSubscribed}">
+                                
+                                <aura:set attribute="else">
+                                    <aura:if isTrue="{! not(empty(v.UserList)) }">
+                                        <lightning:layout class="barClass" horizontalAlign="spread" verticalAlign="center">
+                                            <span><strong>Online Users</strong></span>
+                                            <lightning:button label="Refresh" onclick="{!c.refreshUserlist}" iconName="utility:sync" iconPosition="right"  variant="success" />
+                                        </lightning:layout>
+                                        <br/>
+                                        <aura:iteration items="{!v.UserList}" var="user">
+                                            <lightning:layout horizontalAlign="spread" verticalAlign="center">
+                                                <lightning:layoutItem flexibility="auto" size="8">
+                                                    <img class="statusIconClass" src="{!$Resource.UserOnline}"/>
+                                                    <lightning:formattedName class="marginClass" firstName="{!user.FirstName}" lastName="{!user.LastName}"/>
+                                                </lightning:layoutItem>
+                                                <lightning:layoutItem flexibility="auto" size="2">
+                                                    <aura:if isTrue="{! v.currentUser.Id != user.Id }">
+                                                        <div class="slds-align_absolute-center" onclick="{! c.selectChatUser }" data-id="{!user.Id}" data-name="{!user.Name}">
+                                                            <lightning:buttonIcon title="Start Chat" size="medium" iconName="utility:chat" 
+                                                                                  alternativeText="Start Chat" onclick="{!c.addTab}"/>
+                                                        </div>
+                                                    </aura:if>
+                                                </lightning:layoutItem>
+                                            </lightning:layout>
+                                            <div style="height:5px"/>
+                                        </aura:iteration>
+                                        <aura:set attribute="else">
+                                            <div class="slds-text-align_center">No online users</div>
+                                            
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:set>
+                            </aura:if>
+                        </lightning:card>
+                    </div>
+                    <div class="slds-col slds-size_2-of-3">
+                        <!--div aura:id="ModalDialogPlaceholder">
+                <div class="wk_static">
+             
+                                <lightning:card >
+                                    <aura:set attribute="actions">
+                <lightning:buttonIcon class="buttonClass" size="medium" iconName="utility:close" alternativeText="Close" onclick="{! c.closeChatWindow }"/>
+            </aura:set>
+                                    <hr class="linebreakClass"/>
+                                    <section role="log" class="slds-chat ChatBoxClass slds-scrollable_y">
+                                        <ul id="ChatList" aura:id="ChatList" class="slds-chat-list">
+                                        </ul>
+                                    </section>
+                                    <lightning:layout verticalAlign="end">
+                                        <lightning:layoutItem flexibility="auto"  size="10">
+                                            <lightning:input aura:id="inputMessage" name="inputMessage" placeholder="Type your message here..."/>
+                                        </lightning:layoutItem>
+                                        <lightning:layoutItem flexibility="auto" size="1" padding="horizontal-small">
+                                            <lightning:buttonIcon iconClass="slds-align_absolute-center" size="medium" iconName="utility:send" alternativeText="Send" onclick="{! c.sendMessage }"/>
+                                        </lightning:layoutItem>
+                                    </lightning:layout>
+                                </lightning:card>
+       
+                </div>
+            </div-->
+  
+                        <lightning:tabset variant="scoped">
+                           
+                            <aura:iteration items="{!v.moretabs}" var="obj">
+                                {!obj}
+                            </aura:iteration>
+                            
+                        </lightning:tabset>
+                        <!--lightning:button label="Add tab" /-->
+                    </div>
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button--neutral" onclick="{!c.removeComponent}">Close</button>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop " aura:id="MB-Back"></div>
+</aura:component>

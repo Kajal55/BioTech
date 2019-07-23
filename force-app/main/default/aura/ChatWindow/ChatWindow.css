@@ -1,0 +1,14 @@
+.THIS .loading{
+    background-image: url(/resource/svgclose) 
+}
+
+ .THIS.slds-modal__container{ 
+     height : auto; width: 80%; max-width: 70vh; 
+   } 
+   .THIS .modal-body{ 
+     height : 40vh !important; 
+     max-height: 40vh !important; 
+   } 
+    .THIS.slds-modal__footer{ 
+     display: inline !important; 
+   }

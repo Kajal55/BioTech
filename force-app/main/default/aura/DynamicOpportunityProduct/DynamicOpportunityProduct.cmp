@@ -1,0 +1,49 @@
+<aura:component controller="AddProductController" Implements="flexipage:availableForRecordHome,force:hasRecordId">
+  <!--Init handler which is call doInit js function on component Load-->  
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+  
+ <!--Event handler for Add and Delete Row Event which is fire from Child Component-->    
+    <aura:handler name="DeleteRowCompEvt" event="c:DeleteRowCompEvt" action="{!c.removeDeletedRow}"/>
+    <aura:handler name="AddNewRowCompEvt" event="c:AddNewRowCompEvt" action="{!c.addNewRow}"/>
+ 
+ <!--Aura Attribute for store Contact Object List as Array-->    
+    <aura:attribute name="contactList" type="Opportunity_Product__c[]"/> 
+
+    
+ <!--Table Part-->           
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+        <thead>
+            <tr class="slds-text-title_caps">
+                <th scope="col">
+                    <div class="slds-truncate">S.No</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="First Name">Product</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="First Name">Quantity</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Last Name">Sales Price</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Phone">Description</div>
+                </th>
+            </tr>
+        </thead>   
+        <tbody>
+           <!--Iterate the child Component for display Table rows 
+               with pass the List Item Index for track the Every child Component 
+               and pass each List Contact Instance -->         
+            <aura:iteration items="{!v.contactList}" var="item" indexVar="index">
+                <c:DynamicOpportunityProductItem oppProdItem="{!item}" rowIndex="{!index}" />
+            </aura:iteration>
+        </tbody>
+    </table>
+    <br/>
+    <!--Save Button which is call Save js function on click --> 
+    <div class="slds-grid slds-align_absolute-center">
+    <button class="slds-button slds-button_brand" onclick="{!c.Save}">Save</button>
+    </div>
+    
+</aura:component>

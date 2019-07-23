@@ -1,0 +1,59 @@
+<aura:component  implements="force:hasRecordId,flexipage:availableForAllPageTypes"   >
+    <aura:handler name="switchTab" event="c:showTab" action="{! c.handleSwitchTabCompEvent }"/>
+    <aura:attribute name="showTab" type="String" />
+    <aura:attribute name="cutOffDateForSalesPlanning" type="String" description="Last Day for sales planning"/>
+    <aura:attribute name="fiscalYear" type="Integer" />
+    <aura:attribute name="currYear" type="Integer" />
+    <aura:attribute name="year" type="Integer" description="Current Year"/>
+    <aura:attribute name="month" type="String" description="Month will be in short like--> 'Jan','Feb',etc"/>
+    <aura:attribute name="monthMap" type="Map" default="{ 0: 'Jan', 1: 'Feb',2: 'Mar',3: 'Apr',4: 'May',5: 'Jun',6: 'Jul',7: 'Aug',8: 'Sep',9: 'Oct',10: 'Nov',11: 'Dec' }" />
+    <aura:handler name="change" value="{!v.showTab}" action="{! c.handleShowTabChange }"/>
+    <aura:handler
+                  name="init"
+                  value="{!this}"
+                  action="{! c.doInit }" /> 
+        
+    
+        <lightning:tabset aura:id="salesTab" variant="scoped" selectedTabId="{!v.showTab}" >
+            
+            <lightning:tab  class="slds-text-color_error" label="April" id="Apr">
+                <c:TargetAndPlanning targetMonth="Apr" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="May" id="May">
+                <c:TargetAndPlanning targetMonth="May" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="June" id="Jun">
+                <c:TargetAndPlanning targetMonth="Jun" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="July" id="Jul">
+                <c:TargetAndPlanning targetMonth="Jul" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="August" id="Aug">
+                <c:TargetAndPlanning targetMonth="Aug" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="September" id="Sep">
+                <c:TargetAndPlanning targetMonth="Sep" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="October" id="Oct">
+                <c:TargetAndPlanning targetMonth="Oct" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="November" id="Nov">
+                <c:TargetAndPlanning targetMonth="Nov" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab label="December" id="Dec">
+                <c:TargetAndPlanning targetMonth="Dec" endDayForPlanning="{! v.cutOffDateForSalesPlanning }"  />
+            </lightning:tab>
+            <lightning:tab label="January" id="Jan">
+                <c:TargetAndPlanning targetMonth="Jan" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <!--<lightning:tab iconName="action:approval" class="slds-is-active slds-text-color_inverse"  label="February" id="Feb" showErrorIndicator="">-->
+            <lightning:tab  class="slds-is-active slds-text-color_inverse"  label="February" id="Feb" showErrorIndicator="">
+                <c:TargetAndPlanning targetMonth="Feb" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            <lightning:tab  label="March" id="Mar">
+                <c:TargetAndPlanning targetMonth="Mar" endDayForPlanning="{! v.cutOffDateForSalesPlanning }" />
+            </lightning:tab>
+            
+        </lightning:tabset>
+    
+</aura:component>

@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Event template" >
+    <aura:attribute name="tabId" type="String"/>
+    <aura:attribute name="refreshParent" type="Boolean" default="false"/>
+</aura:event>

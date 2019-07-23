@@ -1,0 +1,46 @@
+<aura:component implements="force:appHostable">
+	<aura:attribute name="oppProdItem" type="Opportunity_Product__c"/>
+    <aura:attribute name="rowIndex" type="String"/>
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}" description="Used for lookup comp"/>
+    <aura:handler name="change" value="{! v.selectedLookUpRecord }" action="{! c.onLookupValueChange }" />
+    
+    <!-- Register 2 Lightning Event for handle add or Delete rows on Parent Component  --> 
+    <aura:registerEvent name="DeleteRowCompEvt" type="c:DeleteRowCompEvt"/> 
+    <aura:registerEvent name="AddNewRowCompEvt" type="c:AddNewRowCompEvt"/> 
+    
+    <!-- Table Row -->   
+    <tr class="slds-text-title_caps">
+        <td> 
+            {!v.rowIndex + 1}
+        </td>
+        <td >
+            <c:CustomLookupNew objectAPIName="Product__c" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" />
+        </td>
+        <td>
+            <ui:inputNumber class="slds-input" value="{!v.oppProdItem.Quantity__c}"/>
+        </td>
+        <td>
+            <ui:inputNumber class="slds-input" value="{!v.oppProdItem.Sales_Price__c}"/>
+        </td>
+        <td>
+            <ui:inputPhone class="slds-input" value="{!v.oppProdItem.Description__c}"/>
+        </td>
+        <td>
+            <!-- conditionally Display Add or Delete Icons
+                 if rowIndex is 0 then show Add New Row Icon else show delete Icon
+             --> 
+            <aura:if isTrue="{!v.rowIndex == 0}">
+                <a onclick="{!c.AddNewRow}">
+                  <lightning:icon iconName="utility:add" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
+                  <span class="slds-assistive-text">Add Icon</span>
+                </a>    
+              <aura:set attribute="else">
+                  <a onclick="{!c.removeRow}">
+                   <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                   <span class="slds-assistive-text">Delete Icon</span>
+                  </a>
+              </aura:set> 
+            </aura:if>
+        </td> 
+    </tr>
+</aura:component>

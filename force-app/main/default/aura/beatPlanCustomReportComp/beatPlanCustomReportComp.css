@@ -1,0 +1,18 @@
+.THIS .tier-one {
+    color: red; 
+    font-weight: bold;
+}
+.THIS .tier-two {
+  background-color: pink;
+}
+.THIS .tier-three { 
+  background-color: orange;
+}
+.THIS .tier-four { 
+  	color: green; 
+    font-weight: bold;
+}
+.THIS.slds-spinner_container {  
+  z-index: 10000;
+  position: fixed;   
+}

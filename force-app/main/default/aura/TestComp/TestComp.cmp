@@ -1,0 +1,32 @@
+<aura:component controller="TargetAndPlanningController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="product" type="Object[]" />
+    <aura:handler name="init" value="{!this}" action="{! c.doInit}"/>
+    <div style="width: 95%; height:95%;" class="slds-scrollable_x slds-scrollable_y">
+        <table id="myTable" class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered " role="grid">
+            <thead>
+                <tr class="slds-line-height_reset slds-text-heading--label">
+                    <th class="" scope="col">
+                        <div class="slds-truncate " title="Account Names">Products </div>
+                    </th> 
+                     <th class="" scope="col">
+                        <div class="slds-truncate " title="Account Names">AOP </div>
+                    </th> 
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{! v.product }" var="prod" indexVar="ind">
+                    <tr class="slds-hint-parent" >
+                        <td data-label="Product Name" role="gridcell">
+                            <div title="">{! prod.Name }</div>
+                        </td>
+                        
+                      <td data-label="Product Name" role="gridcell">
+                           <div class="slds-truncate" title=""><strong>{!prod.Monthly_AOP__r[0].Name}</strong></div>
+                        </td>
+
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

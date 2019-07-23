@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	 <aura:registerEvent name="deleteLineItemConfirmEvt" type="c:DeleteConfirmationEvent" />
+     <lightning:card>
+        <div class="slds-text-align_center slds-align_absolute-center">
+         <strong><h1>Are you sure want to delete this?</h1></strong>
+        </div>
+        <div class="slds-grid slds-align_absolute-center">
+            <lightning:button variant="brand" label="Yes" title="Click Yes To Delete" onclick="{! c.onApprove }"/>
+            <lightning:button variant="brand" label="No" title="Click No To Go Back" onclick="{! c.onReject }"/>
+        </div>
+    </lightning:card>
+</aura:component>

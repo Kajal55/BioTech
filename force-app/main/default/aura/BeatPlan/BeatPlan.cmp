@@ -1,0 +1,17 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" controller="DailyCallRecordController">
+    <aura:attribute type="event[]" name="list"></aura:attribute>
+    <aura:handler name="init" value="{!this}" action="{!c.init}" ></aura:handler>
+    <div  style="float:right;width:75%">
+        <lightning:map
+          zoomLevel="5"
+          height="900px">
+        </lightning:map>
+    </div>
+    <div style="width:25%;float:left;height:100vh;overflow:auto">
+        
+        	<aura:iteration items="{!v.list}" var="item">
+            <span>{!item.Subject}</span>
+            </aura:iteration>
+        
+    </div>
+</aura:component>

@@ -1,0 +1,104 @@
+<aura:component controller="CustomLookupController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes" access="global">
+        
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="selectedRecord" type="Object" default="" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="IconName" type="string" default=""/>
+    <aura:attribute name="Message" type="String" default=""/>
+    <aura:attribute name="label" type="string" default="Account"/>
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="objectAPIName" type="string" default="Account"/>
+    <aura:attribute name="recId" type="Id" default=""/>
+    <aura:attribute name="accountId" type="Id" default=""/>
+    <aura:attribute name="nameField" type="String" default="Name"/>
+    <aura:attribute name="customCondition" type="String" default=""/>
+    <aura:attribute name="required" type="Boolean" default="false"/>
+    <aura:attribute name="error" type="boolean" default="false" />
+    <aura:attribute name="disabled" type="Boolean" default="false"/>
+    
+	<aura:registerEvent name="onSuccessEvent" type="c:onSuccessEvent"/>
+    <aura:registerEvent name="clearEvent" type="c:ClearEvent"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:method name="reInit" action="{!c.doInit}" description="Runs the init method again "/>
+        
+    <div onmouseleave="{!c.onblur}" aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single" >
+      <aura:if isTrue="{!v.required}">
+      	<abbr title="required" class="slds-required">*</abbr>
+      </aura:if>
+      <label class="slds-form-element__label" for="lookup-348">{!v.label}</label>
+  
+      <!--This part is for display search bar for lookup-->  
+      <div class="slds-form-element__control">
+          <div class="slds-input-has-icon slds-input-has-icon--right">
+              <lightning:icon class="{!'slds-input__icon' + (v.selectedRecord == '' || v.selectedRecord == null ? ' slds-show' : ' slds-hide')}" iconName="utility:search" size="x-small" alternativeText="search"/> 
+              
+              <!-- This markup is for when an record is selected -->
+              <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                  <aura:if isTrue="{!v.disabled}">
+                      <span class="slds-pill slds-pill--link pillSize slds-theme--shade" style="cursor:no-drop;">
+                          <span class="slds-pill__icon_container">
+                              <lightning:icon iconName="{!v.IconName}" size="x-small" alternativeText="{!v.IconName}"/>
+                          </span>
+                          
+                          <span class="slds-pill__action">
+                              <span class="slds-pill__label">{!v.selectedRecord.Name}</span>
+                          </span>
+                          
+                          <button class="slds-button slds-pill__remove slds-button--icon-bare" type="button" title="Disabled" disabled="true" style="cursor:no-drop;">
+                              <span class="lightningPrimitiveIcon" data-aura-class="lightningPrimitiveIcon"> 
+                                  <lightning:icon iconName="utility:close" size="x-small" alternativeText="close"/>
+                              </span>
+                          </button>
+                      </span>
+                      <aura:set attribute="else">
+                          <lightning:pill aura:id="billingAccountId" class="{!'pillSize' + (v.disabled == true ? ' slds-theme--shade': '')}" label="{!v.selectedRecord.Name}" name="{!v.selectedRecord.Id}" onremove="{!v.disabled==true ? '' : c.clear}" >
+                              <aura:set attribute="media">
+                                  <lightning:icon iconName="{!v.IconName}" size="x-small" alternativeText="{!v.IconName}"/>
+                              </aura:set>
+                          </lightning:pill>                          
+                      </aura:set>
+                  </aura:if>
+              </div>
+              <!--// This markup is for when an record is selected -->
+
+              <div aura:id="lookupField" class="">
+                  <span class="slds-icon_container  slds-combobox__input-entity-icon" title="record">
+                     <!-- <lightning:icon class="slds-icon slds-icon slds-icon_small slds-icon-text-default" iconName="{!v.IconName}" size="x-small" alternativeText="icon"/>
+                      <span class="slds-assistive-text"></span>-->
+                  </span>
+                  <!-- <ui:inputText click="{!c.onfocus}" updateOn="keyup" keyup="{!c.keyPressController}" class="slds-lookup__search-input slds-input leftPaddingClass" value="{!v.SearchKeyWord}" placeholder="Search..."/> -->
+                  <span class="lookupInput" onclick="{!c.onfocus}" onkeyup="{!c.keyPressController}" updateOn="keypress">
+                  	<lightning:input aura:id="inputEle" required="{!v.required}" class="{!v.error == true ? 'slds-lookup__search-input slds-input leftPaddingClass slds-has-error': 'slds-lookup__search-input slds-input leftPaddingClass'}"  value="{!v.SearchKeyWord}" placeholder="Search..." />
+              	  </span> 
+               </div>
+          </div>
+      
+      <!-- This part is for Display typehead lookup result List-->
+      <ul style="max-height:160px; overflow-y: auto; min-height:40px;margin-top:0px !important" class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds" role="listbox">
+          <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner"/>
+          <center> {!v.Message} </center>
+        <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec" indexVar="i">
+
+              <!--<c:customLookupResult oRecord="{!singleRec}" />-->
+
+            <li aura:id="" role="presentation" data-count="{!i}" class="slds-listbox__item" onclick="{!c.selectRecord}" index="">
+                <span id="listbox-option-unique-id-01" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                    <span class="slds-media__figure">
+                        <span class="slds-icon_container" title="Description of icon when needed">
+                            <lightning:icon iconName="{!v.IconName}" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                            <span class="slds-assistive-text">Description of icon</span>
+                        </span>
+                    </span>    
+                    <span class="slds-media__body">
+                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">{!singleRec.Name} </span>
+                    </span>
+                </span>
+            </li>
+          </aura:iteration>
+      </ul>
+      <!--// This part is for Display typehead lookup result List-->
+    </div>
+  </div>
+   <!--lookup code Customlookup-->
+
+</aura:component>

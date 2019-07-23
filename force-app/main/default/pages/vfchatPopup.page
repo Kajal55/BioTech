@@ -1,0 +1,39 @@
+<apex:page >
+ <apex:includeLightning />
+<apex:outputPanel id="popInnerOutputPnl" styleClass="customPopup" >
+ <div style="width:30%;height:100px;" id="FlipcardContainer" />
+    
+    </apex:outputPanel>
+ <script>
+ 
+ $Lightning.createComponent("c:ChatWindow",
+ { 
+ selectedUserId : {!$CurrentPage.parameters.UserId}, 
+ selectedUserName : {!$CurrentPage.parameters.username} ,
+ message : {!$CurrentPage.parameters.message}
+ },
+ "FlipcardContainer",
+ function(cmp) {
+ console.log('Component created, do something cool here');
+ });
+ 
+ </script>
+
+ <style type="text/css">
+.customPopup {
+    background-color: white;
+    border-style: solid;
+    border-width: 2px;
+    left: 20%;
+    padding: 10px;
+    position: absolute;
+    z-index: 9999;
+    /* These are the 3 css properties you will need to tweak so the pop 
+                            up displays in the center of the screen. First set the width. Then set 
+                            margin-left to negative half of what the width is. You can also add 
+                            the height property for a fixed size pop up.*/
+    width: 500px;
+    top: 20%;
+}
+    </style>
+</apex:page>
